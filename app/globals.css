@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+/* "Control room at night": near-black, one accent for power flow,
+   amber and red reserved for risk so colour always means something. */
+@theme {
+  --color-night: #05070c;
+  --color-panel: #0b111b;
+  --color-panel2: #101826;
+  --color-line: #1c2738;
+  --color-ink: #e7eef8;
+  --color-dim: #8a99b0;
+  --color-faint: #56647a;
+  --color-flow: #22d3ee;
+  --color-flow2: #0891b2;
+  --color-safe: #34d399;
+  --color-watch: #fbbf24;
+  --color-risk: #f43f5e;
+  --color-sun: #fde68a;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--color-night);
+  color: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.grid-bg {
+  background-image: linear-gradient(rgba(34, 211, 238, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.045) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.glow {
+  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.55));
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(16, 24, 38, 0.85), rgba(11, 17, 27, 0.85));
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+}
+
+/* Power flow: dashes march along the line; reverse = power flowing back. */
+@keyframes march {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+.flow-dash {
+  stroke-dasharray: 6 8;
+  animation: march 1s linear infinite;
+}
+.flow-dash.reverse {
+  animation-direction: reverse;
+}
+
+@keyframes pulse-ring {
+  0% {
+    r: 14;
+    opacity: 0.7;
+  }
+  100% {
+    r: 30;
+    opacity: 0;
+  }
+}
+.pulse-ring {
+  animation: pulse-ring 1.4s ease-out infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fade-up {
+  animation: fade-up 0.6s ease-out both;
+}
+
+input[type="range"].scrub {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-line);
+  outline: none;
+}
+input[type="range"].scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--color-flow);
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.2), 0 0 12px rgba(34, 211, 238, 0.8);
+  cursor: pointer;
+}
+input[type="range"].scrub::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-flow);
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.2), 0 0 12px rgba(34, 211, 238, 0.8);
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-dash,
+  .pulse-ring,
+  .fade-up {
+    animation: none;
+  }
+}
